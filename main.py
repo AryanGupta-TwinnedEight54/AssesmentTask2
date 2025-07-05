@@ -41,3 +41,6 @@ class Station: # Done by Caden
         
 calingord = Station(50, 30)
 calingord.total(2)
+
+
+peak_hours = [[time(6,30), time(8,30)],[time(15,00), time(18,00)]]
