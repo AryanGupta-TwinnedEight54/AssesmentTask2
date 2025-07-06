@@ -24,19 +24,17 @@ class Tram: # Done by Aryan
     
 # (need to add station name and change add and remove passengers to 'waiting passengers'.)
 class Station: # Done by Caden
-    def __init__(self, add_passengers, remove_passengers):
-        # add_passengers is the number of passengers waiting at a station.
-        add_passenger = 30
-        self.add_passengers = add_passengers
-        # remove_passengers is the number of passengers waiting at a station that are now boarding a tram.
-        remove_passenger = 15
-        self.remove_passengers = remove_passengers
+    def __init__(self, station_name, waiting_passengers):
+        # waiting_passengers is the number of passengers waiting at a station.
+        waiting_passengers = 30
+        self.waiting_passengers = waiting_passengers
+        # station_name is the name of the station that a tram is arriving at.
+        station_name = "Carlingford"
+        self.station_name = station_name
+    # Prints an output stating the number of passengers waiting at a certain station.
+    def total(self, station_name, waiting_passengers):
+        print(self.station_name + " station has at total of " + self.waiting_passengers + " passengers waiting.")
 
-    def total(self, add_passengers):
-        print("This station has" + self.add_passengers + "passengers.")
-
-    def leaving_passengers(self, remove_passengers):
-        print(remove_passengers + "passengers have left the station.")
         
         
 calingord = Station(50, 30)
