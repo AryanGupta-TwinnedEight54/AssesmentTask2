@@ -1,7 +1,8 @@
 from datetime import time
+import random
 
 class Tram: # Done by Aryan
-    def __init__(self, id, current_location,capacity, current_passenger=0):
+    def __init__(self, id, capacity, current_passenger=0, current_location = 'NL',):
         self.id = id
         self.current_passengers = current_passenger
         self.location = current_location
@@ -24,9 +25,8 @@ class Tram: # Done by Aryan
     
 # (need to add station name and change add and remove passengers to 'waiting passengers'.)
 class Station: # Done by Caden
-    def __init__(self, station_name, waiting_passengers):
+    def __init__(self, station_name, waiting_passengers=30):
         # waiting_passengers is the number of passengers waiting at a station.
-        waiting_passengers = 30
         self.waiting_passengers = waiting_passengers
         # station_name is the name of the station that a tram is arriving at.
         station_name = "Carlingford"
@@ -37,8 +37,20 @@ class Station: # Done by Caden
 
         
         
-calingord = Station(50, 30)
-calingord.total(2)
-
-
+tram_passenger_limit = 0
 peak_hours = [[time(6,30), time(8,30)],[time(15,00), time(18,00)]]
+offpeak_interval = time(15)
+peak_interval = time(7, 30)
+num_trams = 16
+tram_station_name_list = ["Westmead","Westmead Hospital","Children’s Hospital","Ngara (T-ways)", "Fennell Street","Prince Alfred Square", "Parramatta Square", "Parramatta","Robin Thomas", "Camellia","Rydalmere", "Dundas","Telopea", "Carlingford"]
+station_list = []
+tram_list = []
+
+for name in tram_station_name_list:
+    station = Station(station_name=name, waiting_passengers=random.randint(20,30))
+    station_list.append(station)
+
+
+for i in range(num_trams):
+    tram = Tram(id=i, capacity=None)
+    tram_list.append(tram)
