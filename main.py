@@ -22,7 +22,7 @@ class Tram: # Done by Aryan
         self.location = location
  
     
-# (need to add station name and change add and remove passengers to 'waiting passengers'.)
+# Class containing information about each tram station.
 class Station: # Done by Caden
     def __init__(self, station_name, waiting_passengers=30):
         # waiting_passengers is the number of passengers waiting at a station.
