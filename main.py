@@ -1,6 +1,5 @@
-from datetime import time
+from datetime import timedelta
 import random
-
 class Tram: # Done by Aryan
     def __init__(self, id, capacity, current_passenger=0, current_location = 'NL',):
         self.id = id
@@ -38,9 +37,9 @@ class Station: # Done by Caden
         
         
 tram_passenger_limit = 0
-peak_hours = [[time(6,30), time(8,30)],[time(15,00), time(18,00)]]
-offpeak_interval = time(15)
-peak_interval = time(7, 30)
+peak_hours = [[timedelta(6,30), timedelta(8,30)],[timedelta(15,00), timedelta(18,00)]]
+offpeak_interval = timedelta(15)
+peak_interval = timedelta(7, 30)
 num_trams = 16
 tram_station_name_list = ["Westmead","Westmead Hospital","Children’s Hospital","Ngara (T-ways)", "Fennell Street","Prince Alfred Square", "Parramatta Square", "Parramatta","Robin Thomas", "Camellia","Rydalmere", "Dundas","Telopea", "Carlingford"]
 station_list = []
