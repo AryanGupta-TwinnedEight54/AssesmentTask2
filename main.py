@@ -34,8 +34,9 @@ class Station: # Done by Caden
     def total(self, station_name, waiting_passengers):
         print(self.station_name + " station has at total of " + self.waiting_passengers + " passengers waiting.")
 
+
         
-        
+# Done by Aryan        
 tram_passenger_limit = 0
 peak_hours = [[timedelta(6,30), timedelta(8,30)],[timedelta(15,00), timedelta(18,00)]]
 offpeak_interval = timedelta(15)
@@ -53,3 +54,11 @@ for name in tram_station_name_list:
 for i in range(num_trams):
     tram = Tram(id=i, capacity=None)
     tram_list.append(tram)
+
+# Done by Caden
+current_time = timedelta(6,30)
+
+if current_time == peak_hours:
+    print("True: Peak Hour")
+else:
+    print("False: Not Peak Hour")
