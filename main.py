@@ -58,7 +58,7 @@ for i in range(num_trams):
 # Done by Caden
 current_time = timedelta(6,30)
 
-if current_time == peak_hours:
+if any(start <= current_time <= end for start, end in peak_hours):
     print("True: Peak Hour")
 else:
     print("False: Not Peak Hour")
