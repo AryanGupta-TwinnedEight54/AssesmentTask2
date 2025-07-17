@@ -53,3 +53,22 @@ for name in tram_station_name_list:
 for i in range(num_trams):
     tram = Tram(id=i, capacity=None)
     tram_list.append(tram)
+
+
+# Done by Aryan, Note Caden did annother function before me but I accedintantly deleted that commit while trying to delete my commit
+def format_time(t, use_12hr=False):
+    t = str(t)
+    t = t.split(':')
+    hours = int(t[0])
+    minutes = t[1]
+    seconds = t[2]
+    if use_12hr:
+        suffix = ''
+        if hours > 12:
+            suffix = 'PM'
+            hours = hours - 12
+        else:
+            suffix = 'AM'
+        return f'{hours}:{minutes}:{seconds}:{suffix}'
+    elif use_12hr == False:
+        return f'{hours}:{minutes}:{seconds}'
