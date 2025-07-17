@@ -22,7 +22,7 @@ class Tram: # Done by Aryan
         self.location = location
  
     
-# Class containing information about each tram station.
+# (need to add station name and change add and remove passengers to 'waiting passengers'.)
 class Station: # Done by Caden
     def __init__(self, station_name, waiting_passengers=30):
         # waiting_passengers is the number of passengers waiting at a station.
@@ -34,9 +34,8 @@ class Station: # Done by Caden
     def total(self, station_name, waiting_passengers):
         print(self.station_name + " station has at total of " + self.waiting_passengers + " passengers waiting.")
 
-
         
-# Done by Aryan        
+        
 tram_passenger_limit = 0
 peak_hours = [[timedelta(6,30), timedelta(8,30)],[timedelta(15,00), timedelta(18,00)]]
 offpeak_interval = timedelta(15)
@@ -62,3 +61,21 @@ if any(start <= current_time <= end for start, end in peak_hours):
     print("True: Peak Hour")
 else:
     print("False: Not Peak Hour")
+
+# Done by Aryan, Note Caden did annother function before me but I accedintantly deleted that commit while trying to delete my commit
+def format_time(t, use_12hr=False):
+    t = str(t)
+    t = t.split(':')
+    hours = int(t[0])
+    minutes = t[1]
+    seconds = t[2]
+    if use_12hr:
+        suffix = ''
+        if hours > 12:
+            suffix = 'PM'
+            hours = hours - 12
+        else:
+            suffix = 'AM'
+        return f'{hours}:{minutes}:{seconds}:{suffix}'
+    elif use_12hr == False:
+        return f'{hours}:{minutes}:{seconds}'
