@@ -1,11 +1,13 @@
 from datetime import timedelta
 import random
-class Tram: # Done by Aryan
-    def __init__(self, id, capacity, current_passenger=0, current_location = 'NL',):
-        self.id = id
+class Tram:
+    def __init__(self, tram_id, capacity, current_location, direction, current_passenger=0, stations_traversed=0):
+        self.id = tram_id
         self.current_passengers = current_passenger
         self.location = current_location
         self.capacity = capacity
+        self.direction = direction
+        self.stations_traversed = stations_traversed
     def board(self, passengers):
         if self.current_passengers + passengers > self.capacity:
             print('TRAM FULL')
@@ -19,7 +21,7 @@ class Tram: # Done by Aryan
         if self.current_passengers - passengers >- self.capacity:
             self.current_passengers -= passengers
     def move_to(self, location):
-        self.location = location
+        self.location += location
  
     
 # (need to add station name and change add and remove passengers to 'waiting passengers'.)
@@ -56,18 +58,22 @@ for name in tram_station_name_list:
     station = Station(station_name=name, waiting_passengers=random.randint(20,30))
     station_list.append(station)
 
-
+tram_list = []
+loc = 1
 for i in range(num_trams):
-    tram = Tram(id=i, capacity=None)
+    loc -= 1
+    direction = 1 if i % 2 == 0 else 0
+    tram = Tram(tram_id=i, direction=direction, current_location=loc, capacity=12312)
     tram_list.append(tram)
+
 
 # Done by Caden
 
-def is_peak(current_time):
+def time_interval_finder(current_time):
     if any(start <= current_time <= end for start, end in peak_hours):
-        return True
+        return peak_interval
     else:
-        return False
+        return offpeak_interval
 
 # Done by Aryan, Note Caden did annother function before me but I accedintantly deleted that commit while trying to delete my commit
 def format_time(t, use_12hr=False):
@@ -86,12 +92,24 @@ def format_time(t, use_12hr=False):
         return f'{hours}:{minutes}:{seconds}:{suffix}'
     elif use_12hr == False:
         return f'{hours}:{minutes}:{seconds}'
+        
     
-
 while current_time < end_time:
-    if is_peak(current_time):
-        time_interval = peak_interval
-    else: 
-        time_interval = offpeak_interval
-    current_time = current_time +time_interval
-    print("Current time:", format_time(current_time))
+    for tram in tram_list:
+        if tram.location < 0:
+            tram.move_to(1)
+        elif tram.location >= 0:
+            print(tram.location)
+            tram.move_to(1)
+            
+        if tram.location == 14:
+            if tram.direction == 0:
+                tram.direction = 1
+                tram.location = 0
+            else:
+                tram.direction = 0
+                tram.location = 0
+
+     
+    current_time += time_interval_finder(current_time)
+    print("Current time:", format_time(current_time, use_12hr=True))

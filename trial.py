@@ -1,10 +1,8 @@
-from datetime import timedelta
+tram_station_name_list = ["Westmead","Westmead Hospital","Children’s Hospital","Ngara (T-ways)", "Fennell Street","Prince Alfred Square", "Parramatta Square", "Parramatta","Robin Thomas", "Camellia","Rydalmere", "Dundas","Telopea", "Carlingford"]
+tram_list = []
 
-start_time = timedelta(hours=6, minutes=30)
-end_time = timedelta(hours= 7)
-current_time = start_time
-
-while current_time < end_time:
-    x = timedelta(minutes=25)
-    current_time += x
-    print(current_time)
+x= 1
+print(len(tram_station_name_list))
+for i in range(14):
+    x -= 1
+    print(x)
