@@ -94,12 +94,17 @@ def format_time(t, use_12hr=False):
         return f'{hours}:{minutes}:{seconds}'
         
     
-while current_time < end_time:
+for i in range(10):
     for tram in tram_list:
         if tram.location < 0:
             tram.move_to(1)
         elif tram.location >= 0:
-            print(tram.location)
+            if tram.direction == 1:
+                print(f'{tram_station_name_list[tram.location]} tram id is {tram.id}')
+            if tram.direction == 0:
+                x = tram_station_name_list[::-1]
+                print(f'{x[tram.location]} tram id is {tram.id}')
+                
             tram.move_to(1)
             
         if tram.location == 14:
