@@ -47,7 +47,7 @@ peak_hours = [
 offpeak_interval = timedelta(minutes=15)
 peak_interval = timedelta(minutes=7, seconds=30)
 num_trams = 16
-tram_station_name_list = ["Westmead","Westmead Hospital","Children’s Hospital","Ngara (T-ways)", "Fennell Street","Prince Alfred Square", "Parramatta Square", "Parramatta","Robin Thomas", "Camellia","Rydalmere", "Dundas","Telopea", "Carlingford"]
+tram_station_name_list = ["Westmead", "Westmead Hospital", "Childrens Hospital","Ngara", "Benaud Oval", "Fennell Street", "Prince Alfred Square", "Church Street", "Parramatta Square", "Robin Thomas", "Tramway Avenue"," Rosehill Gardens", "Yallamundi", "Dundas", "Telopea","Carlingford"]
 station_list = []
 tram_list = []
 start_time = timedelta(hours=6, minutes=30)
@@ -60,13 +60,17 @@ for name in tram_station_name_list:
 
 tram_list = []
 loc = 1
-for i in range(num_trams):
+even = 0
+id = 0
+for i in range(int(num_trams/2)):
     loc -= 1
-    direction = 1 if i % 2 == 0 else 0
-    tram = Tram(tram_id=i, direction=direction, current_location=loc, capacity=12312)
+    
+    tram = Tram(tram_id=id, direction=1, current_location=loc, capacity=12312)
+    id +=1
+    tram1 = Tram(tram_id=id, direction=0, current_location=loc, capacity=12312)
+    id +=1
     tram_list.append(tram)
-
-
+    tram_list.append(tram1)
 # Done by Caden
 
 def time_interval_finder(current_time):
@@ -100,10 +104,10 @@ for i in range(10):
             tram.move_to(1)
         elif tram.location >= 0:
             if tram.direction == 1:
-                print(f'{tram_station_name_list[tram.location]} tram id is {tram.id}')
+                print(f'tram {tram.id} is at station {tram_station_name_list[tram.location]}')
             if tram.direction == 0:
                 x = tram_station_name_list[::-1]
-                print(f'{x[tram.location]} tram id is {tram.id}')
+                print(f'tram {tram.id} is at station {x[tram.location]}')
                 
             tram.move_to(1)
             
@@ -116,5 +120,5 @@ for i in range(10):
                 tram.location = 0
 
      
-    current_time += time_interval_finder(current_time)
+    current_time += timedelta(minutes=7, seconds=30)
     print("Current time:", format_time(current_time, use_12hr=True))
