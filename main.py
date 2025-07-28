@@ -44,12 +44,13 @@ class Tram:
         else:
             return True
     def change_direction(self):
-        if self.direction == 0:
+        if self.direction == 0 or self.direction == 0.0:
             self.direction = 1
             self.location = 0.5
-        if self.direction == 1:
-            self.direction = 0.0
+        elif self.direction == 1 or self.direction == 1.0:
+            self.direction = 0
             self.location = 0.5
+
 
 # (need to add station name and change add and remove passengers to 'waiting passengers'.)
 class Station: # Done by Caden
@@ -89,21 +90,29 @@ tram_list = []
 loc = 1
 even = 0
 id = 0
-for i in range(int(num_trams/2)):
 
+for i in range(int(num_trams / 2)):
     loc -= 1
-    if i % 2 == 0:
-        tram = Tram(tram_id=id, direction=1, current_location=loc, tram_peak=False, capacity=None)
-        id +=1
-        tram1 = Tram(tram_id=id, direction=0, current_location=loc, tram_peak=False, capacity=None)
-        id +=1
+    even += 1
+    if even % 2 == 0:
+        tram = Tram(tram_id=id, direction=1, current_location=loc, tram_peak=False, capacity=80)
+        print(f'No: ID {tram.id}')
+        id += 1
+        tram1 = Tram(tram_id=id, direction=0, current_location=loc, tram_peak=False, capacity=80)
+        print(f'No: ID {tram1.id}')
+        id += 1
     else:
-        tram = Tram(tram_id=id, direction=1, current_location=loc, tram_peak=True, capacity= None)
-        id +=1
-        tram1 = Tram(tram_id=id, direction=0, current_location=loc, tram_peak=True, capacity=None)
-        id +=1
+        tram = Tram(tram_id=id, direction=1, current_location=loc, tram_peak=True, capacity=80)
+        print(f'Yes: ID {tram.id}')
+        id += 1
+        tram1 = Tram(tram_id=id, direction=0, current_location=loc, tram_peak=True, capacity=80)
+        print(f'Yes: ID {tram1.id}')
+        id += 1
+
     tram_list.append(tram)
     tram_list.append(tram1)
+
+
 # Done by Caden
 
 def ispeak():
@@ -111,6 +120,18 @@ def ispeak():
         return True
     else:
         return False
+
+def peak_timing():
+    # Get total hours and minutes from the timedelta
+    total_seconds = current_time.total_seconds()
+    hours = int(total_seconds // 3600)
+    minutes = int((total_seconds % 3600) // 60)
+
+    # Convert to total minutes for easy comparison
+    current_minutes = hours * 60 + minutes
+
+    # 7:00 AM = 420 minutes, 7:00 PM = 1140 minutes
+    return 420 <= current_minutes <= 1140
 
 # Done by Aryan, Note Caden did annother function before me but I accedintantly deleted that commit while trying to delete my commit
 def format_time(t, use_12hr=False):
@@ -135,24 +156,35 @@ def format_time(t, use_12hr=False):
 
 for i in range(50):
     for tram in tram_list:
+        if ispeak():
+            tram.capacity = 400
+        else:
+            tram.capaicity = 200
+        
         if tram.location < 0:
             tram.move_to(1)
         elif tram.location >= 0:
-            if tram.direction == 1 and tram.on_station():
-                if tram.id == 0:
-                    print(f'tram {tram.id} is at station {opposite_tram_list[int(tram.location)].station_name}')
-            if tram.direction == 0:
-
-                opposite_tram_list = station_list[::-1]
-                if tram.id == 0 and tram.on_station():
-                    print(f'tram {tram.id} is at station {opposite_tram_list[int(tram.location)].station_name}')
+            if tram.direction == 1 and tram.on_station() and tram.on_track:
+                print(f'tram {tram.id} is at station {station_list[int(tram.location)].station_name}')
+            if tram.direction == 0 and tram.on_station() and tram.on_track:
+                opposite_station_list = station_list[::-1]
+                print(f'tram {tram.id} is at station {opposite_station_list[int(tram.location)].station_name}')
         
             tram.move_to(0.5)
             
-        if tram.location == 16:
+        if tram.location == 16.0:
             tram.change_direction()
+        if peak_timing() and tram.on_track == False:
+            tram.deploy()
+        if peak_timing() == False and tram.tram_peak:
+            tram.on_track = False
+
+        
+
+            
         
 
             
     current_time += timedelta(minutes=7, seconds=30)
-    #print("Current time:", format_time(current_time, use_12hr=True))
+
+    print("Current time:", format_time(current_time, use_12hr=True))
