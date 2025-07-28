@@ -1,13 +1,20 @@
 from datetime import timedelta
 import random
 class Tram:
-    def __init__(self, tram_id, capacity, current_location, direction, current_passenger=0, stations_traversed=0):
+    def __init__(self, tram_id, capacity, current_location, direction,  tram_peak, current_passenger=0, stations_traversed=0):
         self.id = tram_id
         self.current_passengers = current_passenger
         self.location = current_location
         self.capacity = capacity
         self.direction = direction
         self.stations_traversed = stations_traversed
+        self.tram_peak = tram_peak
+        self.on_track = None
+        if self.tram_peak == True:
+            self.on_track = False
+        else:
+            self.on_track = True
+                    
     def board(self, passengers):
         if self.current_passengers + passengers > self.capacity:
             print('TRAM FULL')
@@ -20,8 +27,26 @@ class Tram:
            print('THERE IS LESS PASSENGER THAN ON THE TRAM')
         if self.current_passengers - passengers >- self.capacity:
             self.current_passengers -= passengers
-    def move_to(self, location):
-        self.location += location
+    def move_to(self, movement):
+        if movement == 1:
+            self.location += 1
+        else:
+            self.location += 0.5
+    def deploy(self):
+        self.on_track = True
+    def remove(self):
+        self.on_track = False
+    def should_be_on_track(self):
+        return self.on_track
+    def on_station(self):
+        if  '0.5' in str(self.location):
+            return False
+        else:
+            return True
+    
+
+
+
  
     
 # (need to add station name and change add and remove passengers to 'waiting passengers'.)
@@ -63,21 +88,27 @@ loc = 1
 even = 0
 id = 0
 for i in range(int(num_trams/2)):
+
     loc -= 1
-    
-    tram = Tram(tram_id=id, direction=1, current_location=loc, capacity=12312)
-    id +=1
-    tram1 = Tram(tram_id=id, direction=0, current_location=loc, capacity=12312)
-    id +=1
+    if i % 2 == 0:
+        tram = Tram(tram_id=id, direction=1, current_location=loc, tram_peak=False, capacity=None)
+        id +=1
+        tram1 = Tram(tram_id=id, direction=0, current_location=loc, tram_peak=False, capacity=None)
+        id +=1
+    else:
+        tram = Tram(tram_id=id, direction=1, current_location=loc, tram_peak=True, capacity= None)
+        id +=1
+        tram1 = Tram(tram_id=id, direction=0, current_location=loc, tram_peak=True, capacity=None)
+        id +=1
     tram_list.append(tram)
     tram_list.append(tram1)
 # Done by Caden
 
-def time_interval_finder(current_time):
+def ispeak():
     if any(start <= current_time <= end for start, end in peak_hours):
-        return peak_interval
+        return True
     else:
-        return offpeak_interval
+        return False
 
 # Done by Aryan, Note Caden did annother function before me but I accedintantly deleted that commit while trying to delete my commit
 def format_time(t, use_12hr=False):
@@ -99,17 +130,17 @@ def format_time(t, use_12hr=False):
         
     
 for i in range(10):
-    for tram in tram_list:
+    for tram in trams:
         if tram.location < 0:
             tram.move_to(1)
         elif tram.location >= 0:
-            if tram.direction == 1:
-                print(f'tram {tram.id} is at station {tram_station_name_list[tram.location]}')
-            if tram.direction == 0:
+            if tram.direction == 1 and tram.on_station() and tram.should_be_on_track():
+                print(f'tram {tram.id} is at station {tram_station_name_list[int(tram.location)]}')
+            if tram.direction == 0 and tram.on_station() and tram.should_be_on_track():
                 x = tram_station_name_list[::-1]
-                print(f'tram {tram.id} is at station {x[tram.location]}')
-                
-            tram.move_to(1)
+                print(f'tram {tram.id} is at station {x[int(tram.location)]}')
+        
+        tram.move_to(0)
             
         if tram.location == 14:
             if tram.direction == 0:
@@ -117,8 +148,9 @@ for i in range(10):
                 tram.location = 0
             else:
                 tram.direction = 0
-                tram.location = 0
+                tram.location = 0 
+        
 
-     
+            
     current_time += timedelta(minutes=7, seconds=30)
     print("Current time:", format_time(current_time, use_12hr=True))
