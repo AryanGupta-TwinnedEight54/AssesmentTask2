@@ -1,8 +1,15 @@
-tram_station_name_list = ["Westmead","Westmead Hospital","Children’s Hospital","Ngara (T-ways)", "Fennell Street","Prince Alfred Square", "Parramatta Square", "Parramatta","Robin Thomas", "Camellia","Rydalmere", "Dundas","Telopea", "Carlingford"]
-tram_list = []
+from datetime import timedelta
 
-x= 1
-print(len(tram_station_name_list))
-for i in range(14):
-    x -= 1
-    print(x)
+current_time = timedelta(hours=6, minutes=30)
+peak_hours = [
+    [timedelta(hours=6, minutes=30), timedelta(hours=8, minutes=30)],
+    [timedelta(hours=15), timedelta(hours=18)]
+]
+
+def ispeak():
+    if any(start <= current_time <= end for start, end in peak_hours):
+        return False
+    else:
+        return True
+
+print(ispeak())
