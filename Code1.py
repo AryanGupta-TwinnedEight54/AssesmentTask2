@@ -158,7 +158,7 @@ def format_time(t, use_12hr=False):
 
 
 
-for i in range(10):
+for i in range(50):
     for tram in tram_list:
         if ispeak():
             tram.capacity = 400
