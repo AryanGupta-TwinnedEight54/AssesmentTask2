@@ -39,23 +39,25 @@ class Tram:
     def should_be_on_track(self):
         return self.on_track
     def on_station(self):
-        if  '0.5' in str(self.location):
+        if  '.5' in str(self.location):
             return False
         else:
             return True
-    
+    def change_direction(self):
+        if self.direction == 0:
+            self.direction = 1
+            self.location = 0.5
+        if self.direction == 1:
+            self.direction = 0.0
+            self.location = 0.5
 
-
-
- 
-    
 # (need to add station name and change add and remove passengers to 'waiting passengers'.)
 class Station: # Done by Caden
     def __init__(self, station_name, waiting_passengers=30):
         # waiting_passengers is the number of passengers waiting at a station.
         self.waiting_passengers = waiting_passengers
         # station_name is the name of the station that a tram is arriving at.
-        station_name = "Carlingford"
+        station_name = station_name
         self.station_name = station_name
     # Prints an output stating the number of passengers waiting at a certain station.
     def total(self, station_name, waiting_passengers):
@@ -128,29 +130,29 @@ def format_time(t, use_12hr=False):
     elif use_12hr == False:
         return f'{hours}:{minutes}:{seconds}'
         
-    
-for i in range(10):
-    for tram in trams:
+
+
+
+for i in range(50):
+    for tram in tram_list:
         if tram.location < 0:
             tram.move_to(1)
         elif tram.location >= 0:
-            if tram.direction == 1 and tram.on_station() and tram.should_be_on_track():
-                print(f'tram {tram.id} is at station {tram_station_name_list[int(tram.location)]}')
-            if tram.direction == 0 and tram.on_station() and tram.should_be_on_track():
-                x = tram_station_name_list[::-1]
-                print(f'tram {tram.id} is at station {x[int(tram.location)]}')
-        
-        tram.move_to(0)
-            
-        if tram.location == 14:
+            if tram.direction == 1 and tram.on_station():
+                if tram.id == 0:
+                    print(f'tram {tram.id} is at station {opposite_tram_list[int(tram.location)].station_name}')
             if tram.direction == 0:
-                tram.direction = 1
-                tram.location = 0
-            else:
-                tram.direction = 0
-                tram.location = 0 
+
+                opposite_tram_list = station_list[::-1]
+                if tram.id == 0 and tram.on_station():
+                    print(f'tram {tram.id} is at station {opposite_tram_list[int(tram.location)].station_name}')
+        
+            tram.move_to(0.5)
+            
+        if tram.location == 16:
+            tram.change_direction()
         
 
             
     current_time += timedelta(minutes=7, seconds=30)
-    print("Current time:", format_time(current_time, use_12hr=True))
+    #print("Current time:", format_time(current_time, use_12hr=True))
