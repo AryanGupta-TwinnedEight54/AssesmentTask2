@@ -17,16 +17,14 @@ class Tram:
                     
     def board(self, passengers):
         if self.current_passengers + passengers > self.capacity:
-            print('TRAM FULL')
+            self.current_passengers = self.capacity
         if self.current_passengers + passengers <= self.capacity:
             self.current_passengers += passengers
 
         
-    def depart(self, passengers):
-        if self.current_passengers - passengers < self.capacity:
-           print('THERE IS LESS PASSENGER THAN ON THE TRAM')
-        if self.current_passengers - passengers >- self.capacity:
-            self.current_passengers -= passengers
+    def depart(self):
+        departing = random.randint(0, self.current_passengers)
+        self.current_passengers -= departing
     def move_to(self, movement):
         if movement == 1:
             self.location += 1
@@ -54,15 +52,25 @@ class Tram:
 
 # (need to add station name and change add and remove passengers to 'waiting passengers'.)
 class Station: # Done by Caden
-    def __init__(self, station_name, waiting_passengers=30):
+    def __init__(self, station_name, waiting_passengers=80):
         # waiting_passengers is the number of passengers waiting at a station.
         self.waiting_passengers = waiting_passengers
         # station_name is the name of the station that a tram is arriving at.
         station_name = station_name
         self.station_name = station_name
     # Prints an output stating the number of passengers waiting at a certain station.
-    def total(self, station_name, waiting_passengers):
-        print(self.station_name + " station has at total of " + self.waiting_passengers + " passengers waiting.")
+    
+    def board(self, tram):
+        if tram.capacity == 400:
+            self.waiting_passengers = random.randint(400, 600)
+            amount_boarded = random.randint(200, 400)
+            tram.board(amount_boarded)
+            self.waiting_passengers -= amount_boarded
+        else:
+            self.waiting_passengers = random(200, 250)
+            amount_boarded = random.randint(0,200)
+            tram.board(amount_boarded)
+            self.waiting_passengers -= amount_boarded
 
         
         
@@ -96,17 +104,13 @@ for i in range(int(num_trams / 2)):
     even += 1
     if even % 2 == 0:
         tram = Tram(tram_id=id, direction=1, current_location=loc, tram_peak=False, capacity=80)
-        print(f'No: ID {tram.id}')
         id += 1
         tram1 = Tram(tram_id=id, direction=0, current_location=loc, tram_peak=False, capacity=80)
-        print(f'No: ID {tram1.id}')
         id += 1
     else:
         tram = Tram(tram_id=id, direction=1, current_location=loc, tram_peak=True, capacity=80)
-        print(f'Yes: ID {tram.id}')
         id += 1
         tram1 = Tram(tram_id=id, direction=0, current_location=loc, tram_peak=True, capacity=80)
-        print(f'Yes: ID {tram1.id}')
         id += 1
 
     tram_list.append(tram)
@@ -164,11 +168,19 @@ for i in range(50):
         if tram.location < 0:
             tram.move_to(1)
         elif tram.location >= 0:
-            if tram.direction == 1 and tram.on_station() and tram.on_track:
-                print(f'tram {tram.id} is at station {station_list[int(tram.location)].station_name}')
-            if tram.direction == 0 and tram.on_station() and tram.on_track:
+            if tram.direction == 1 and tram.on_station():
+                tram.depart()
+                station = station_list[int(tram.location)]
+                print(f'tram {tram.id} is at station {station.station_name} with {tram.current_passengers} passengers')
+               
+
+            if tram.direction == 0 and tram.on_station():
                 opposite_station_list = station_list[::-1]
+                station = opposite_station_list[int(tram.location)]
+                tram.depart()
+                station.board(tram)
                 print(f'tram {tram.id} is at station {opposite_station_list[int(tram.location)].station_name}')
+
         
             tram.move_to(0.5)
             
