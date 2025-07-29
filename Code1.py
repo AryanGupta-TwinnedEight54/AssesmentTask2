@@ -158,7 +158,7 @@ def format_time(t, use_12hr=False):
 
 
 
-for i in range(50):
+while current_time <= end_time:
     for tram in tram_list:
         if ispeak():
             tram.capacity = 400
@@ -168,13 +168,13 @@ for i in range(50):
         if tram.location < 0:
             tram.move_to(1)
         elif tram.location >= 0:
-            if tram.direction == 1 and tram.on_station():
+            if tram.direction == 1 and tram.on_station() and tram.on_track:
                 tram.depart()
                 station = station_list[int(tram.location)]
                 print(f'tram {tram.id} is at station {station.station_name} with {tram.current_passengers} passengers')
                
 
-            if tram.direction == 0 and tram.on_station():
+            if tram.direction == 0 and tram.on_station() and tram.on_track:
                 opposite_station_list = station_list[::-1]
                 station = opposite_station_list[int(tram.location)]
                 tram.depart()
