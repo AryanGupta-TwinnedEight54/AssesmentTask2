@@ -22,7 +22,7 @@ while check == 1:
     choice = input("Please enter '1' or '2' here. ")
     # If the user inputted '1', the program runs the linear output and then ends the while loop.
     if choice == "1":
-        subprocess.run(["python", dir_path + "\\main.py"])
+        subprocess.run(["python", dir_path + "\\Code1.py"])
         check = 0
     # If the user inputted '2', the program runs the timetable output and then ends the while loop.
     elif choice == "2":
