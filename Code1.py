@@ -61,7 +61,9 @@ class Station: # Done by Caden
     # Prints an output stating the number of passengers waiting at a certain station.
     
     def board(self, tram):
-        if tram.capacity == 400:
+        if self.station_name in ['Robin Thomas',  'Parramatta Square', 'Church Street', 'Prince Alfred Square']:
+            tram.current_passengers = tram.capacity 
+        elif tram.capacity == 400:
             self.waiting_passengers = random.randint(400, 600)
             amount_boarded = random.randint(200, 400)
             tram.board(amount_boarded)
@@ -86,9 +88,18 @@ num_trams = 16
 tram_station_name_list = ["Westmead", "Westmead Hospital", "Childrens Hospital","Ngara", "Benaud Oval", "Fennell Street", "Prince Alfred Square", "Church Street", "Parramatta Square", "Robin Thomas", "Tramway Avenue"," Rosehill Gardens", "Yallamundi", "Dundas", "Telopea","Carlingford"]
 station_list = []
 tram_list = []
-start_time = timedelta(hours=5, minutes=00)
-current_time = start_time
-end_time = timedelta(days = 1, hours=1, minutes=00)
+user_start = input('Please enter user start time(to generate full timetable press enter) in DD:HH:MM ')
+if user_start == '':
+    start_time = timedelta(hours=5, minutes=00)
+    current_time = start_time
+    end_time = timedelta(days = 1, hours=1, minutes=00)
+else:
+    split_time = user_start.split(':')
+    start_time = timedelta(days=int(split_time[0]), hours=int(split_time[1]), minutes=int(split_time[2]))
+    current_time = start_time
+    user_end = input('Please enter user end time')
+    user_end_split = user_end.split(':')
+    end_time = timedelta(days=int(user_end_split[0]), hours=int(user_end_split[1]), minutes=int(user_end_split[2]))
 
 for name in tram_station_name_list:
     station = Station(station_name=name, waiting_passengers=random.randint(20,30))
