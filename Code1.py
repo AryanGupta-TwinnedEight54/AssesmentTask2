@@ -67,7 +67,7 @@ class Station: # Done by Caden
             tram.board(amount_boarded)
             self.waiting_passengers -= amount_boarded
         else:
-            self.waiting_passengers = random(200, 250)
+            self.waiting_passengers = random.randint(200, 250)
             amount_boarded = random.randint(0,200)
             tram.board(amount_boarded)
             self.waiting_passengers -= amount_boarded
@@ -86,9 +86,9 @@ num_trams = 16
 tram_station_name_list = ["Westmead", "Westmead Hospital", "Childrens Hospital","Ngara", "Benaud Oval", "Fennell Street", "Prince Alfred Square", "Church Street", "Parramatta Square", "Robin Thomas", "Tramway Avenue"," Rosehill Gardens", "Yallamundi", "Dundas", "Telopea","Carlingford"]
 station_list = []
 tram_list = []
-start_time = timedelta(hours=6, minutes=30)
+start_time = timedelta(hours=5, minutes=00)
 current_time = start_time
-end_time = timedelta(hours=20, minutes=30)
+end_time = timedelta(days = 1, hours=1, minutes=00)
 
 for name in tram_station_name_list:
     station = Station(station_name=name, waiting_passengers=random.randint(20,30))
@@ -138,24 +138,40 @@ def peak_timing():
     return 420 <= current_minutes <= 1140
 
 # Done by Aryan, Note Caden did annother function before me but I accedintantly deleted that commit while trying to delete my commit
-def format_time(t, use_12hr=False):
-    t = str(t)
-    t = t.split(':')
-    hours = int(t[0])
-    minutes = t[1]
-    seconds = t[2]
-    if use_12hr:
-        suffix = ''
-        if hours > 12:
-            suffix = 'PM'
-            hours = hours - 12
-        else:
-            suffix = 'AM'
-        return f'{hours}:{minutes}:{seconds}:{suffix}'
-    elif use_12hr == False:
-        return f'{hours}:{minutes}:{seconds}'
-        
 
+
+def format_time(t: timedelta, use_12hr=False):
+    total_seconds = int(t.total_seconds())
+    days = total_seconds // 86400
+    hours = (total_seconds % 86400) // 3600
+    minutes = (total_seconds % 3600) // 60
+    seconds = total_seconds % 60
+
+    if use_12hr:
+        suffix = 'AM'
+        if hours >= 12:
+            suffix = 'PM'
+            if hours > 12:
+                hours -= 12
+        elif hours == 0:
+            hours = 12
+        time_str = f'{hours:02}:{minutes:02}:{seconds:02} {suffix}'
+    else:
+        time_str = f'{hours:02}:{minutes:02}:{seconds:02}'
+
+    if days > 0:
+        return f'{days}d {time_str}'
+    else:
+        return time_str
+
+
+setting_preferance = input('Do you want it in 24 hour yes or no: ')
+use_24_hour_time = None
+if setting_preferance == 'no':
+    print('Works')
+    use_24_hour_time = False
+else:
+    use_24_hour_time = True
 
 
 while current_time <= end_time:
@@ -198,5 +214,7 @@ while current_time <= end_time:
 
             
     current_time += timedelta(minutes=7, seconds=30)
-
-    print("Current time:", format_time(current_time, use_12hr=True))
+    if use_24_hour_time:
+        print("Current time:", format_time(current_time, use_12hr=False))
+    if use_24_hour_time == False:
+        print("Current time:", format_time(current_time, use_12hr=True))
