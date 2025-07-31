@@ -197,17 +197,19 @@ while current_time <= end_time:
         elif tram.location >= 0:
             if tram.direction == 1 and tram.on_station() and tram.on_track:
                 tram.depart()
+                
                 station = station_list[int(tram.location)]
                 print(f'tram {tram.id} is at station {station.station_name} with {tram.current_passengers} passengers')
+                station.board(tram)
                
 
             if tram.direction == 0 and tram.on_station() and tram.on_track:
                 opposite_station_list = station_list[::-1]
                 station = opposite_station_list[int(tram.location)]
                 tram.depart()
+                
+                print(f'tram {tram.id} is at station {opposite_station_list[int(tram.location)].station_name} with {tram.current_passengers}')
                 station.board(tram)
-                print(f'tram {tram.id} is at station {opposite_station_list[int(tram.location)].station_name}')
-
         
             tram.move_to(0.5)
             
