@@ -1,7 +1,10 @@
 from datetime import timedelta
 import random
+
+### Quick understanding of how this program works, my idea was that the program need 8 tram for off peak interval for 15 minutes so I figured for a tram to reach the midway point between is 7.5 that is why tram movement after it reaches 0; calinford or westead dpending on the direction is 0.5. 
 class Tram:
     def __init__(self, tram_id, capacity, current_location, direction,  tram_peak, current_passenger=0, stations_traversed=0):
+        # The creation of multipe differant attrbutes and the assigning of True of False values for if the tram should be on track when peak hours come in - Aryan       
         self.id = tram_id
         self.current_passengers = current_passenger
         self.location = current_location
@@ -14,17 +17,18 @@ class Tram:
             self.on_track = False
         else:
             self.on_track = True
-                    
+    # Changes the amount of passengers to either capcaty if enough the amount eneterd
     def board(self, passengers):
         if self.current_passengers + passengers > self.capacity:
             self.current_passengers = self.capacity
         if self.current_passengers + passengers <= self.capacity:
             self.current_passengers += passengers
 
-        
+    # Departs the amount of passengers
     def depart(self):
         departing = random.randint(0, self.current_passengers)
         self.current_passengers -= departing
+    # the movemet of 0.5
     def move_to(self, movement):
         if movement == 1:
             self.location += 1
@@ -41,6 +45,7 @@ class Tram:
             return False
         else:
             return True
+    # changes the location
     def change_direction(self):
         if self.direction == 0 or self.direction == 0.0:
             self.direction = 1
@@ -59,8 +64,9 @@ class Station: # Done by Caden
         station_name = station_name
         self.station_name = station_name
     # Prints an output stating the number of passengers waiting at a certain station.
-    
+    # The Function was redone by Aryan
     def board(self, tram):
+        # Meets with the capicity requirments 
         if self.station_name in ['Robin Thomas',  'Parramatta Square', 'Church Street', 'Prince Alfred Square']:
             tram.current_passengers = tram.capacity 
         elif tram.capacity == 400:
@@ -82,12 +88,15 @@ peak_hours = [
     [timedelta(hours=15), timedelta(hours=18)]
 ]
 
+# Defines all the needed global variables
 offpeak_interval = timedelta(minutes=15)
 peak_interval = timedelta(minutes=7, seconds=30)
 num_trams = 16
 tram_station_name_list = ["Westmead", "Westmead Hospital", "Childrens Hospital","Ngara", "Benaud Oval", "Fennell Street", "Prince Alfred Square", "Church Street", "Parramatta Square", "Robin Thomas", "Tramway Avenue"," Rosehill Gardens", "Yallamundi", "Dundas", "Telopea","Carlingford"]
 station_list = []
 tram_list = []
+
+# Takes user input
 user_start = input('Please enter user start time(to generate full timetable press enter) in DD:HH:MM ')
 if user_start == '':
     start_time = timedelta(hours=5, minutes=00)
@@ -100,7 +109,7 @@ else:
     user_end = input('Please enter user end time')
     user_end_split = user_end.split(':')
     end_time = timedelta(days=int(user_end_split[0]), hours=int(user_end_split[1]), minutes=int(user_end_split[2]))
-
+# creates a list of instantinces
 for name in tram_station_name_list:
     station = Station(station_name=name, waiting_passengers=random.randint(20,30))
     station_list.append(station)
@@ -109,7 +118,7 @@ tram_list = []
 loc = 1
 even = 0
 id = 0
-
+# creates another list of instances but with two changes first this creates two trams per iteration 1 going in direction and the other. And ever second iteration(checking if the variable even is even or odd) it defines the tram as a peak or ofpeak tram
 for i in range(int(num_trams / 2)):
     loc -= 1
     even += 1
@@ -150,7 +159,7 @@ def peak_timing():
 
 # Done by Aryan, Note Caden did annother function before me but I accedintantly deleted that commit while trying to delete my commit
 
-
+# Same logic as before just with days added
 def format_time(t: timedelta, use_12hr=False):
     total_seconds = int(t.total_seconds())
     days = total_seconds // 86400
@@ -175,34 +184,38 @@ def format_time(t: timedelta, use_12hr=False):
     else:
         return time_str
 
-
+# Preferances 
 setting_preferance = input('Do you want it in 24 hour yes or no: ')
 use_24_hour_time = None
 if setting_preferance == 'no':
-    print('Works')
     use_24_hour_time = False
 else:
     use_24_hour_time = True
 
-
+# The main loop of the program
 while current_time <= end_time:
     for tram in tram_list:
+        # changes the peak capactiy based on time
         if ispeak():
             tram.capacity = 400
         else:
             tram.capaicity = 200
-        
+        # Each tram say for 2 has negative number so 0, -1, -2, ... -16. If it is a negative number move it up by one
         if tram.location < 0:
             tram.move_to(1)
         elif tram.location >= 0:
-            if tram.direction == 1 and tram.on_station() and tram.on_track:
+            # if it a positive number
+            if tram.direction == 1 and tram.on_station() and tram.on_track:# if the tram is going a certian and reached a station and should be on the track then
                 tram.depart()
-                
+                # depart
+                # the station
                 station = station_list[int(tram.location)]
+
                 print(f'tram {tram.id} is at station {station.station_name} with {tram.current_passengers} passengers')
                 station.board(tram)
+                # boarding and printing
                
-
+            # Same logic opposite direction
             if tram.direction == 0 and tram.on_station() and tram.on_track:
                 opposite_station_list = station_list[::-1]
                 station = opposite_station_list[int(tram.location)]
@@ -212,7 +225,7 @@ while current_time <= end_time:
                 station.board(tram)
         
             tram.move_to(0.5)
-            
+        
         if tram.location == 16.0:
             tram.change_direction()
         if peak_timing() and tram.on_track == False:
@@ -225,7 +238,7 @@ while current_time <= end_time:
             
         
 
-            
+    # updates the time
     current_time += timedelta(minutes=7, seconds=30)
     if use_24_hour_time:
         print("Current time:", format_time(current_time, use_12hr=False))
